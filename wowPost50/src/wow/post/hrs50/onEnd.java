@@ -25,7 +25,10 @@ public class onEnd extends Activity implements OnClickListener{
 			ans.setText(getIntent().getExtras().getString("result"));
 			String r=getIntent().getExtras().getString("result");
 			if(r.equalsIgnoreCase("Congrats ! You won !"))
-			{}
+			{
+				Button bt=(Button) findViewById(R.id.button1);
+				bt.setText("Next !");
+			}
 			else{
 				my.myScore=0;
 				TextView re=(TextView) findViewById(R.id.result);

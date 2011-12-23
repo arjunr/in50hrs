@@ -31,7 +31,7 @@ public class WowPost50Activity extends Activity implements OnClickListener{
 	Button buttonOriginal[],lastPressed,img;
 	Context myContext;
 	TextView timerText,myText,result,wordsEntered[],suggestions[];
-	int last[],top=0,score=0,buttonCount=0;
+	int last[],top=0,score=0,buttonCount=0,buttonPressed[];
 	ArrayList<String> enteredWords = new ArrayList<String>();
 	/** Called when the activity is first created. */
 	Boolean letter=false;
@@ -73,13 +73,14 @@ public class WowPost50Activity extends Activity implements OnClickListener{
         Log.d("arjun", "Button Has been gen");
         buttonOriginal=generatebutton.ButtonCreator();
         last=new int[word.length()+1];
+        buttonPressed=new int[word.length()];
         for(int k=0;k<word.length();k++)
         {	
         	buttonOriginal[k].setOnClickListener(this);
-        	buttonOriginal[k].setTextSize(30.0f);
+        	buttonOriginal[k].setTextSize(35.0f);
         	Typeface myTypeface = Typeface.createFromAsset(this.getAssets(),"fonts/batmfa.ttf");
-        	buttonOriginal[k].setTextColor(Color.BLUE);
-        	
+        	buttonOriginal[k].setTextColor(Color.BLACK);
+        	buttonPressed[k]=0;
         	buttonOriginal[k].setTypeface(myTypeface);
         	myRelativeLayout.addView(buttonOriginal[k]);
         }
@@ -92,7 +93,7 @@ public class WowPost50Activity extends Activity implements OnClickListener{
   		timerText.setLayoutParams(params1);
   		timerText.setTextSize(20.0f);
   		Typeface myTypeface = Typeface.createFromAsset(this.getAssets(),"fonts/Futured.TTF");
-  		timerText.setTextColor(Color.BLUE);
+  		timerText.setTextColor(Color.BLACK);
   		timerText.setTypeface(myTypeface);
     	myRelativeLayout.addView(timerText);
     	
@@ -154,7 +155,7 @@ public class WowPost50Activity extends Activity implements OnClickListener{
   		img.setTextSize(25.0f);
   		img.setBackgroundColor(Color.alpha(0));
   		img.setText("Submit");
-  		img.setTextColor(Color.BLUE);
+  		img.setTextColor(Color.BLACK);
   		img.setOnClickListener(this);
   		  		
      	params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -164,8 +165,8 @@ public class WowPost50Activity extends Activity implements OnClickListener{
   		params.setMargins(0,(int)(2*y1+0.5*y1),0,0 );
   		myText.setLayoutParams(params);
   		myText.setTextColor(Color.BLACK);
-  		myText.setTextSize(30.0f);
-    	myText.setOnClickListener(this);
+  		myText.setTextSize(27.0f);
+    //	myText.setOnClickListener(this);
   		myRelativeLayout.addView(myText);
          
   		RelativeLayout.LayoutParams newParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -185,19 +186,19 @@ public class WowPost50Activity extends Activity implements OnClickListener{
     	int suggestionId=700;
      	for(int j=0;j<5;j++){
 			params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
-			params1.setMargins(0, (int)((3*y1)+j*18+20),0,0);
+			params1.setMargins(0, (int)((3*y1)+j*18+30),0,0);
 			params1.addRule(RelativeLayout.CENTER_HORIZONTAL);
 	    	suggestions[j]= new TextView(getApplicationContext());
 			suggestions[j].setId(suggestionId++);
 			suggestions[j].setLayoutParams(params1);
-			suggestions[j].setTextSize(15.0f);
+			suggestions[j].setTextSize(23.0f);
 			suggestions[j].setTextColor(Color.BLACK);
 			parent=suggestions[j];
 			myRelativeLayout.addView(suggestions[j]);
 		}
     	TextView scoreText=(TextView) findViewById(R.id.textView1);
         scoreText.setText("Score: " +Integer.toString(score));
-        scoreText.setTextColor(Color.BLUE);
+        scoreText.setTextColor(Color.BLACK);
     	result.setText("");
     	myRelativeLayout.setBackgroundColor(Color.WHITE);
     	  mySensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE); // (1)
@@ -303,8 +304,9 @@ public class WowPost50Activity extends Activity implements OnClickListener{
 			top=0;
 			for(int i=0;i<word.length();i++){
 				
-				buttonOriginal[i].setTextColor(Color.BLUE);
+				buttonOriginal[i].setTextColor(Color.BLACK);
 				buttonOriginal[i].setClickable(true);
+				buttonPressed[i]=0;
 			}
 			//TextView tv=(TextView) findViewById(R.id.textView1);
 			TextView tv1=(TextView) findViewById(myText.getId());
@@ -322,20 +324,41 @@ public class WowPost50Activity extends Activity implements OnClickListener{
 			finish();
 		}
 		
+		public static String removeChar(String s, char c) {
+
+			   String r = "";
+			   int flag=0;
+			   for (int i = 0; i < s.length(); i ++) {
+			      if ((s.charAt(i) != c) || (flag!=0)){ 
+			    	  r += s.charAt(i);
+			    	  
+			      }
+			      else
+			    	  flag++;
+			   }
+
+			   return r;
+			}
+		
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		if(myText.getId()==v.getId()){
+		// Removing the ability to touch the label
+	/*	if(myText.getId()==v.getId()){
 			
-			String textString;
+			String textString,my;
 			TextView tapped=(TextView) findViewById(myText.getId());
 			textString=tapped.getText().toString();
-			if(textString.length()!=0)
+			my=textString;
+			my=my.replaceAll(" ", "");
+			if(my.equals("")){}
+			else
 			{
 			textString=textString.substring(0, textString.length()-2);
 			Log.d("arjun", textString);
 			buttonOriginal[last[--top]].setClickable(true);
-			buttonOriginal[last[top]].setTextColor(Color.BLUE);
+			buttonOriginal[last[top]].setTextColor(Color.BLACK);
+			buttonPressed[last[top]]=0;
 			tapped.setText(textString);
 			}
 			for (int i1 = 0; i1 < suggestions.length; i1++){
@@ -351,9 +374,9 @@ public class WowPost50Activity extends Activity implements OnClickListener{
 		    		}
 		    	}
 	    	}
-		}
+		}*/
 		
-		else if(v.getId()==img.getId()){
+		if(v.getId()==img.getId()){
 			
 			int index;
 			TextView tv=(TextView) findViewById(myText.getId());
@@ -406,7 +429,7 @@ public class WowPost50Activity extends Activity implements OnClickListener{
 			}
 			
 			Handler myHandler = new Handler();
-			myHandler.postDelayed(mMyRunnable, 1200);
+			myHandler.postDelayed(mMyRunnable, 650);
 			
 			
 			
@@ -418,23 +441,52 @@ public class WowPost50Activity extends Activity implements OnClickListener{
 		   {
 		      if (buttonOriginal[i].getId() == v.getId())
 		      {
+		    	  
+		    	  if(buttonPressed[i]==1){
+		    		  Log.d("arjun",buttonOriginal[i].getText().toString());
+		    		  TextView tv=(TextView) findViewById(myText.getId());
+		    		  buttonOriginal[i].setTextColor(Color.BLACK);
+		    		  buttonPressed[i]=0;
+		    		  char myString=buttonOriginal[i].getText().charAt(0);
+		    		  String textString=tv.getText().toString();
+		    		  textString=removeChar(textString, myString);
+		    		  textString=textString.replaceAll("  "," ");
+		    		  tv.setText(textString);
+		    		//  top--;
+		    		  for (int i1 = 0; i1 < suggestions.length; i1++){
+			    		  suggestions[i1].setText("");  
+			    	  }
+					
+					pressedButton=textString.replaceAll(" ", "").toLowerCase();
+			    	if(top!=0){
+				    	for(int j=0;j<enteredWords.size();j++){
+				    		Log.d("top",pressedButton+" "+ enteredWords.get(j)+" "+Integer.toString(top));
+				    		if(enteredWords.get(j).startsWith(pressedButton)){
+				    			suggestions[enteredWords.get(j).length()-3].setText(suggestions[enteredWords.get(j).length()-3].getText().toString()+"  " + enteredWords.get(j).toUpperCase());
+				    		}
+				    	}
+
+		    		  break;
+		    		  
+		    	  }}
+		    	  else{
 		    	  for (int i1 = 0; i1 < suggestions.length; i1++){
 		    		  suggestions[i1].setText("");  
 		    	  }
 		    			
 		    	 pressedButton=pressedButton+buttonOriginal[i].getText().toString().toLowerCase();
 		    	 for(int j=0;j<enteredWords.size();j++){
-		    		 Log.d("top",pressedButton+" "+ enteredWords.get(j));
+		    		 
 			         if(enteredWords.get(j).startsWith(pressedButton)){
 			        	 suggestions[enteredWords.get(j).length()-3].setText(suggestions[enteredWords.get(j).length()-3].getText().toString()+"  " + enteredWords.get(j).toUpperCase());
 		    		 }
 		    	 }
-		    	 
-		    		 
+		    	 Log.d("arjun","Button");
+		    	 buttonPressed[i]=1;	 
 		    	 buttonOriginal[i].setTextColor(Color.rgb(233, 150, 122));
-		    	 buttonOriginal[i].setClickable(false);
-		    	 last[top++]=i;
-		    	 Log.d("top", Integer.toString(top)+" " + Integer.toString(last[top-1])+" " + buttonOriginal[last[top-1]].getText().toString());
+		    	 //buttonOriginal[i].setClickable(false);
+		   // 	 last[top++]=i;
+		   // 	 Log.d("top", Integer.toString(top)+" " + Integer.toString(last[top-1])+" " + buttonOriginal[last[top-1]].getText().toString());
 		         buttonText=buttonOriginal[i].getText().toString();
 		         text=myText.getText().toString();
 		    	 myText.setText(text+" "+buttonText);
@@ -443,7 +495,7 @@ public class WowPost50Activity extends Activity implements OnClickListener{
 		      }
 		
 		
-		
+		      }
 		   }
 		}
 	
